@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#09090B">
+  <title>VAULT X | Kurirani modni arhiv</title>
+  <meta name="description" content="VAULT X je kuriran modni arhiv direktnih povezav za Weidian, Taobao, 1688 in Yupoo s pretvorbo agentov in seznamom želja.">
+  <meta property="og:title" content="VAULT X | Kurirani modni arhiv">
+  <meta property="og:description" content="Kurirani modni arhiv z direktnimi povezavami, pretvornikom za 8 agentov in preklopom valute.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://binemarolt-lang.github.io/fashion-vault/">
+  <meta property="og:image" content="https://binemarolt-lang.github.io/fashion-vault/og.png">
+  <meta property="og:locale" content="sl_SI">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://binemarolt-lang.github.io/fashion-vault/">
+  <link rel="apple-touch-icon" href="./icon-180.png">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="preload" href="./fonts/PlusJakartaSans-500-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="./fonts.css">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "VAULT X",
+    "description": "Kurirani modni arhiv direktnih povezav za Weidian, Taobao, 1688 in Yupoo s pretvornikom agentov.",
+    "applicationCategory": "ShoppingApplication",
+    "operatingSystem": "Web"
+  }
+  </script>
+</head>
+<body>
+  <a href="#itemsGrid" class="skip-link">Preskoči na artikle</a>
+  <div id="app" class="app-shell">
+    <!-- Progress bar for chunk loading -->
+    <div id="loadProgressWrap" class="load-progress-wrap" aria-hidden="true">
+      <div id="loadProgressBar" class="load-progress-bar"></div>
+    </div>
+
+    <!-- Top Header -->
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand-group">
+          <a href="./index.html" class="brand-link" aria-label="VAULT X domov">
+            <svg class="brand-mark" width="28" height="28" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+              <rect width="64" height="64" rx="8" fill="#111114" stroke="#222227" stroke-width="2"/>
+              <path d="M14 18L26 46H31L43 18H37.5L28.5 39.5L19.5 18H14Z" fill="#FAFAFA"/>
+              <path d="M39 18L50 46H44.5L36.5 25L39 18Z" fill="#D4FF00"/>
+              <path d="M50 18L36.5 46H41.5L50 26V18Z" fill="#D4FF00"/>
+            </svg>
+            <div class="brand-text">
+              <span class="brand-title">VAULT X</span>
+              <span id="loadStatus" class="load-status">Nalagam...</span>
+            </div>
+          </a>
+        </div>
+
+        <div class="search-wrap">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.3-4.3"/>
+          </svg>
+          <input
+            type="search"
+            id="searchInput"
+            class="search-input"
+            placeholder="Išči ali prilepi povezavo"
+            aria-label="Išči po arhivu izdelkov"
+            autocomplete="off"
+            spellcheck="false"
+          >
+          <button type="button" id="clearSearchBtn" class="clear-search-btn" aria-label="Počisti iskanje" hidden>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+            </svg>
+          </button>
+          <kbd class="search-kbd" aria-hidden="true">/</kbd>
+        </div>
+
+        <div class="topbar-actions">
+          <div class="control-group" title="Izberi nakupovalnega agenta">
+            <label for="agentSelect" class="sr-only">Agent</label>
+            <select id="agentSelect" class="select-control" aria-label="Globalni Agent Switcher">
+              <option value="direct">Direktno</option>
+              <option value="cnfans">CNFans</option>
+              <option value="mulebuy">Mulebuy</option>
+              <option value="kakobuy">KakoBuy</option>
+              <option value="acbuy">ACBuy</option>
+              <option value="superbuy">Superbuy</option>
+              <option value="oopbuy">Oopbuy</option>
+              <option value="sugargoo">Sugargoo</option>
+            </select>
+          </div>
+
+          <div class="currency-switch" role="group" aria-label="Valuta">
+            <button type="button" class="currency-btn active" data-currency="EUR">EUR</button>
+            <button type="button" class="currency-btn" data-currency="CNY">CNY</button>
+            <button type="button" class="currency-btn" data-currency="USD">USD</button>
+          </div>
+
+          <button type="button" id="openConverterBtn" class="btn btn-secondary desktop-only-btn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+            </svg>
+            <span>Pretvornik</span>
+          </button>
+
+          <button type="button" id="openWishlistBtn" class="btn btn-secondary wishlist-trigger" aria-label="Odpri seznam želja">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+            </svg>
+            <span class="desktop-only-label">Želje</span>
+            <span id="wishlistCount" class="count-badge num">0</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile horizontal category strip -->
+    <nav class="mobile-cat-strip" aria-label="Kategorije izdelkov">
+      <div id="mobileCategoryList" class="mobile-cat-list"></div>
+    </nav>
+
+    <!-- Main Layout -->
+    <div class="workspace">
+      <!-- Backdrop for mobile filter bottom-sheet -->
+      <div id="sheetBackdrop" class="sheet-backdrop" hidden></div>
+
+      <!-- Sidebar / Mobile Filter Bottom-Sheet -->
+      <aside id="filterSidebar" class="sidebar" aria-label="Filtri">
+        <div class="sheet-handle-wrap">
+          <div class="sheet-handle"></div>
+        </div>
+        <div class="sheet-header">
+          <h2 class="sheet-title">Filtri</h2>
+          <div class="sheet-header-actions">
+            <button type="button" id="resetFiltersBtn" class="btn-text">Ponastavi</button>
+            <button type="button" id="closeFilterSheetBtn" class="btn-icon mobile-only" aria-label="Zapri filtre">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="sidebar-scroll">
+          <!-- Categories -->
+          <section class="filter-section desktop-cat-section">
+            <h3 class="filter-heading">Kategorije</h3>
+            <ul id="categoryList" class="category-list"></ul>
+          </section>
+
+          <!-- Platform -->
+          <section class="filter-section">
+            <label for="platformSelect" class="filter-heading">Platforma</label>
+            <select id="platformSelect" class="select-control full-width">
+              <option value="">Vse platforme</option>
+              <option value="weidian">Weidian</option>
+              <option value="taobao">Taobao</option>
+              <option value="1688">1688</option>
+              <option value="yupoo">Yupoo</option>
+              <option value="kakobuy">KakoBuy</option>
+              <option value="dhgate">DHgate</option>
+              <option value="store">Trgovine</option>
+            </select>
+          </section>
+
+          <!-- Price Min - Max -->
+          <section class="filter-section">
+            <h3 class="filter-heading">Cena (<span id="priceCurrencyLabel">EUR</span>)</h3>
+            <div class="price-range-row">
+              <input type="number" id="priceMin" class="input-control num" placeholder="Min" min="0" step="1" aria-label="Minimalna cena">
+              <span class="range-sep">-</span>
+              <input type="number" id="priceMax" class="input-control num" placeholder="Max" min="0" step="1" aria-label="Maksimalna cena">
+            </div>
+          </section>
+
+          <!-- Brand -->
+          <section class="filter-section">
+            <label for="brandSelect" class="filter-heading">Znamka</label>
+            <select id="brandSelect" class="select-control full-width">
+              <option value="">Vse znamke</option>
+            </select>
+          </section>
+
+          <!-- Toggles -->
+          <section class="filter-section">
+            <h3 class="filter-heading">Možnosti</h3>
+            <label class="toggle-row">
+              <input type="checkbox" id="withImgToggle">
+              <span>Samo s slikami</span>
+            </label>
+          </section>
+
+          <!-- Sort -->
+          <section class="filter-section">
+            <label for="sortSelect" class="filter-heading">Sortiranje</label>
+            <select id="sortSelect" class="select-control full-width">
+              <option value="default">Privzeto (priporočeno)</option>
+              <option value="price_asc">Cena: najnižja</option>
+              <option value="price_desc">Cena: najvišja</option>
+              <option value="newest">Najnovejše</option>
+              <option value="shuffle">Naključno</option>
+            </select>
+          </section>
+        </div>
+
+        <div class="sheet-footer mobile-only">
+          <button type="button" id="applyFiltersSheetBtn" class="btn btn-primary full-width">Prikaži rezultate</button>
+        </div>
+      </aside>
+
+      <!-- Main Results Area -->
+      <main class="main-content">
+        <!-- Compact Editorial Hero -->
+        <section class="editorial-hero" aria-label="Pregled arhiva">
+          <div class="hero-top">
+            <div class="hero-heading-group">
+              <h1 class="hero-title">Modni arhiv</h1>
+              <span id="heroArchiveCount" class="hero-archive-count num">Pripravljam...</span>
+            </div>
+            <div class="hero-actions">
+              <button type="button" id="shuffleBtn" class="btn btn-secondary hero-shuffle-btn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/>
+                  <path d="m18 2 4 4-4 4"/>
+                  <path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/>
+                  <path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/>
+                  <path d="m18 14 4 4-4 4"/>
+                </svg>
+                <span>Naključno</span>
+              </button>
+              <button type="button" id="refreshCacheBtn" class="btn btn-ghost" title="Osveži lokalni predpomnilnik">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                  <path d="M3 3v5h5"/>
+                  <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+                  <path d="M16 16h5v5"/>
+                </svg>
+                <span>Osveži</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <div class="results-bar">
+          <nav class="breadcrumbs" aria-label="Drobtinice">
+            <span>VAULT X</span>
+            <span aria-hidden="true">/</span>
+            <span id="activeCategoryBreadcrumb">Vsi izdelki</span>
+          </nav>
+          <p id="resultsMeta" class="results-meta num">Pripravljam bazo...</p>
+        </div>
+
+        <div id="activeChips" class="active-chips" hidden></div>
+
+        <!-- Skeleton / Initial Loading -->
+        <div id="skeletonGrid" class="items-grid" aria-hidden="true">
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+        </div>
+
+        <!-- Items Grid -->
+        <div id="itemsGrid" class="items-grid" hidden></div>
+
+        <!-- Empty / Error State -->
+        <div id="emptyState" class="empty-state" hidden>
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+          </svg>
+          <h2 id="emptyTitle">Ni najdenih izdelkov</h2>
+          <p id="emptyDesc">Poskusite z drugačnim iskalnim nizom ali ponastavite filtre.</p>
+          <button type="button" id="emptyResetBtn" class="btn btn-primary">Ponastavi filtre</button>
+        </div>
+
+        <!-- Pagination / Load more -->
+        <div id="paginationBar" class="pagination-bar" hidden>
+          <span id="paginationRange" class="pagination-range num"></span>
+          <button type="button" id="loadMoreBtn" class="btn btn-secondary">Naloži več</button>
+        </div>
+
+        <!-- Footer -->
+        <footer class="site-footer">
+          <div class="footer-left">
+            <span class="footer-brand">VAULT X</span>
+            <span class="footer-note">Kurirani modni arhiv. Slike se nalagajo brez referrerja.</span>
+          </div>
+          <div class="footer-links">
+            <button type="button" class="btn-text" data-info="faq">Vprašanja</button>
+            <button type="button" class="btn-text" data-info="privacy">Zasebnost</button>
+            <button type="button" class="btn-text" data-info="terms">Pogoji uporabe</button>
+          </div>
+        </footer>
+      </main>
+    </div>
+
+    <!-- Sticky Mobile Bottom Bar -->
+    <div class="mobile-bottom-bar">
+      <button type="button" id="mobileFilterBtn" class="mobile-bar-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+        </svg>
+        <span>Filtri</span>
+        <span id="mobileFilterBadge" class="count-badge num" hidden>0</span>
+      </button>
+      <button type="button" id="mobileConverterBtn" class="mobile-bar-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+        </svg>
+        <span>Pretvornik</span>
+      </button>
+      <button type="button" id="mobileWishlistBtn" class="mobile-bar-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+        </svg>
+        <span>Želje (<span id="mobileWishlistCount" class="num">0</span>)</span>
+      </button>
+    </div>
+
+    <!-- Detail Modal -->
+    <div id="detailModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="detailTitle" hidden>
+      <div class="modal-panel detail-modal-panel">
+        <div class="modal-header">
+          <h2 id="detailTitle" class="modal-title">Podrobnosti izdelka</h2>
+          <button type="button" class="btn-icon modal-close" data-close="detailModal" aria-label="Zapri podrobnosti">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+            </svg>
+          </button>
+        </div>
+        <div id="detailBody" class="modal-body"></div>
+      </div>
+    </div>
+
+    <!-- Link Converter Modal -->
+    <div id="converterModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="converterTitle" hidden>
+      <div class="modal-panel">
+        <div class="modal-header">
+          <h2 id="converterTitle" class="modal-title">Pretvornik povezav</h2>
+          <button type="button" class="btn-icon modal-close" data-close="converterModal" aria-label="Zapri pretvornik">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <label for="converterInput" class="field-label">Prilepi Weidian, Taobao, 1688 ali agent povezavo</label>
+          <div class="converter-input-row">
+            <input type="url" id="converterInput" class="input-control full-width" placeholder="https://weidian.com/item.html?itemID=... ali cnfans/mulebuy/kakobuy link">
+            <button type="button" id="converterPasteBtn" class="btn btn-secondary">Prilepi</button>
+          </div>
+          <div id="converterOutput" class="converter-output"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wishlist Drawer -->
+    <div id="wishlistDrawer" class="drawer-backdrop" role="dialog" aria-modal="true" aria-labelledby="wishlistDrawerTitle" hidden>
+      <aside class="drawer-panel">
+        <div class="modal-header">
+          <h2 id="wishlistDrawerTitle" class="modal-title">Seznam želja (<span id="drawerWishlistCount" class="num">0</span>)</h2>
+          <button type="button" class="btn-icon modal-close" data-close="wishlistDrawer" aria-label="Zapri seznam želja">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+            </svg>
+          </button>
+        </div>
+        <div id="wishlistBody" class="drawer-body"></div>
+        <div id="wishlistFooter" class="drawer-footer">
+          <div id="wishlistShip" class="wishlist-ship"></div>
+          <div class="wishlist-total-row">
+            <span>Skupna cena</span>
+            <strong id="wishlistTotal" class="wishlist-total num">0.00 EUR</strong>
+          </div>
+          <div class="wishlist-actions-row">
+            <button type="button" id="shareWishlistBtn" class="btn btn-primary">Deli seznam</button>
+            <button type="button" id="copyWishlistBtn" class="btn btn-secondary">Kopiraj seznam</button>
+            <button type="button" id="exportWishlistBtn" class="btn btn-secondary">Izvozi JSON</button>
+            <button type="button" id="clearWishlistBtn" class="btn btn-ghost">Počisti</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Info Modal (Privacy / Terms) -->
+    <div id="infoModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="infoTitle" hidden>
+      <div class="modal-panel">
+        <div class="modal-header">
+          <h2 id="infoTitle" class="modal-title">Informacije</h2>
+          <button type="button" class="btn-icon modal-close" data-close="infoModal" aria-label="Zapri">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+            </svg>
+          </button>
+        </div>
+        <div id="infoBody" class="modal-body"></div>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  </div>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>
