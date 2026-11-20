@@ -1,0 +1,30 @@
+{
+  "name": "VAULT X",
+  "short_name": "VAULT X",
+  "description": "Arhiv direktnih povezav za Weidian, Taobao, 1688 in Yupoo z agent pretvornikom, QC slikami in seznamom zelja.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0A0A0B",
+  "theme_color": "#0A0A0B",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "./icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "lang": "sl"
+}
