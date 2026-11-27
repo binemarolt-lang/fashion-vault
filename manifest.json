@@ -1,0 +1,30 @@
+{
+  "name": "VAULT X | Kurirani modni arhiv",
+  "short_name": "VAULT X",
+  "description": "Kurirani modni arhiv direktnih povezav za Weidian, Taobao, 1688 in Yupoo s pretvornikom za 8 agentov, QC slikami in seznamom želja.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#FFFFFF",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "./icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "lang": "sl"
+}
